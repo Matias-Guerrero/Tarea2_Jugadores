@@ -137,12 +137,37 @@ void mostrarJugador(char* nombre, Map* jugadores)
     system("pause");
 }
 
+void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugador)
+{
+    Item* item = (Item*) malloc(sizeof(Item));
+    strcpy(item->nombreItem, nombreItem);
+
+    pushBack(jugador->items, item);
+
+    jugador->cantItems++;
+
+    puts("\n========================================");
+    puts("         Item agregado exitosamente");
+    puts("========================================");
+
+    // Aqui agregamos la accion a la pila de acciones
+    Accion* accion = (Accion*) malloc(sizeof(Accion));
+    strcpy(accion->nombreAccion, "agregarItem");
+    accion->datoAccion = item;
+
+    stack_push(jugador->acciones, accion);
+
+    puts("");
+    system("pause");
+}
 
 
 int main(int argc, const char * argv[])
 {
     int opcion;
     char nombre[MAXCHAR];
+    char nombreItem[MAXCHAR];
+    Jugador* jugador;
 
     /*  Aqui Creamos el mapa para guardar jugadores*/
     Map* jugadores = createMap(is_equal_string);
@@ -180,6 +205,30 @@ int main(int argc, const char * argv[])
                 mostrarJugador(nombre, jugadores);
                 break;
             case 3:
+                system("cls");
+
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
+
+                jugador = searchMap(jugadores, nombre);
+
+                if(jugador != NULL)
+                {
+                    ingresarValor(nombreItem, "    Ingrese el nombre del item");
+
+                    puts("");
+                    agregarItem(nombre, nombreItem, jugadores, jugador);
+                }
+                else
+                {
+                    puts("\n========================================");
+                    puts("         El jugador no existe");
+                    puts("========================================");
+
+                    puts("");
+                    system("pause");
+                }
+
+                break;
 
                 break;
             case 4:
