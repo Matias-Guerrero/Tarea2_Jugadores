@@ -7,9 +7,7 @@ typedef List Stack;
 
 #define stack_create() createList()
 
-#define stack_pop(stack) popFront(stack)
-
-#define stack_push(stack) pushFront(stack)
+#define stack_push(stack, data) pushFront(stack, data)
 
 #define stack_pop(stack) popFront(stack)
 

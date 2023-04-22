@@ -161,6 +161,44 @@ void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugado
     system("pause");
 }
 
+void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugador)
+{
+    Item* item = firstList(jugador->items);
+
+    while(item != NULL)
+    {
+        if(strcmp(item->nombreItem, nombreItem) == 0)
+        {
+            popCurrent(jugador->items);
+
+            jugador->cantItems--;
+
+            puts("\n========================================");
+            puts("         Item eliminado exitosamente");
+            puts("========================================");
+
+            // Aqui agregamos la accion a la pila de acciones
+            Accion* accion = (Accion*) malloc(sizeof(Accion));
+            strcpy(accion->nombreAccion, "eliminarItem");
+            accion->datoAccion = item;
+
+            stack_push(jugador->acciones, accion);
+
+            puts("");
+            system("pause");
+            return;
+        }
+
+        item = nextList(jugador->items);
+    }
+
+    puts("\n========================================");
+    puts("         El item no existe");
+    puts("========================================");
+
+    puts("");
+    system("pause");
+}
 
 int main(int argc, const char * argv[])
 {
@@ -229,9 +267,29 @@ int main(int argc, const char * argv[])
                 }
 
                 break;
-
-                break;
             case 4:
+                system("cls");
+
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
+
+                jugador = searchMap(jugadores, nombre); 
+
+                if(jugador != NULL)
+                {
+                    puts("");
+                    ingresarValor(nombreItem, "    Ingrese el nombre del item");
+
+                    eliminarItem(nombre, nombreItem, jugadores, jugador);
+                }
+                else
+                {
+                    puts("\n========================================");
+                    puts("         El jugador no existe");
+                    puts("========================================");
+
+                    puts("");
+                    system("pause");
+                }
 
                 break;
             case 5:
