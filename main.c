@@ -90,6 +90,55 @@ void crearJugador(char* nombre, Map* jugadores)
     sleep(2);
 }
 
+void mostrarJugador(char* nombre, Map* jugadores)
+{
+    Jugador* jugador = searchMap(jugadores, nombre);
+
+    if(jugador != NULL)
+    {
+        puts("\n========================================");
+        printf("    Nombre: %s\n", jugador->nombre);
+        printf("    Puntos de Habilidad: %d\n", jugador->ptsHabilidad);
+        printf("    Cantidad de Items: %d\n", jugador->cantItems);
+
+        if(jugador->cantItems > 0)
+        {
+            int contadorItems = 1;
+            char* item = firstList(jugador->items);
+
+            puts("========================================");
+            puts("    Items:");
+            puts("========================================");
+
+            while(item != NULL)
+            {
+                printf("    Item %d: %s\n", contadorItems, item);
+                item = nextList(jugador->items);
+                contadorItems++;
+            }
+
+            puts("========================================");
+        }
+        else
+        {
+            puts("========================================");
+            puts("           No tiene items");
+            puts("========================================");
+        }
+    }
+    else
+    {
+        puts("\n========================================");
+        puts("         El jugador no existe");
+        puts("========================================");
+    }
+
+    puts("");
+    system("pause");
+}
+
+
+
 int main(int argc, const char * argv[])
 {
     int opcion;
@@ -124,7 +173,11 @@ int main(int argc, const char * argv[])
 
                 break;
             case 2:
-                
+                system("cls");
+
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
+
+                mostrarJugador(nombre, jugadores);
                 break;
             case 3:
 
