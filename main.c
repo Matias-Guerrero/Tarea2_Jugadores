@@ -35,6 +35,15 @@ int is_equal_string(void * key1, void * key2) {
     return 0;
 }
 
+void ingresarValor(char* cadena, char* texto)
+{
+    puts("========================================");
+    printf("%s:\n", texto);
+    puts("========================================");
+    scanf("%30[^\n]", cadena);
+    while(getchar() != '\n');
+}
+
 void mostrarMenu()
 {
     puts("========================================");
@@ -54,10 +63,37 @@ void mostrarMenu()
     puts("========================================");
 }
 
+void crearJugador(char* nombre, Map* jugadores)
+{
+    if(searchMap(jugadores, nombre) == NULL)
+    {
+        Jugador* jugador = (Jugador*) malloc(sizeof(Jugador));
+
+        strcpy(jugador->nombre, nombre);
+        jugador->ptsHabilidad = 0;
+        jugador->cantItems = 0;
+        jugador->items = createList();
+        jugador->acciones = stack_create();
+
+        insertMap(jugadores, jugador->nombre, jugador);
+        puts("\n========================================");
+        puts("         Jugador creado exitosamente");
+        puts("========================================");
+    }
+    else
+    {
+        puts("\n========================================");
+        puts("         El jugador ya existe");
+        puts("========================================");
+    }
+
+    sleep(2);
+}
 
 int main(int argc, const char * argv[])
 {
     int opcion;
+    char nombre[MAXCHAR];
 
     /*  Aqui Creamos el mapa para guardar jugadores*/
     Map* jugadores = createMap(is_equal_string);
@@ -80,6 +116,11 @@ int main(int argc, const char * argv[])
         switch (opcion)
         {
             case 1:
+                system("cls");
+
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
+
+                crearJugador(nombre, jugadores);
 
                 break;
             case 2:
