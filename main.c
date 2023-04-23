@@ -219,6 +219,56 @@ void agregarPuntosHabilidad(char* nombre, int ptsHabilidad, Map* jugadores, Juga
     system("pause");
 }
 
+void mostrarJugadoresItem(char* nombreItem, Map* jugadores)
+{
+    Jugador* jugador = firstMap(jugadores);
+    int contadorJugadores = 0;
+    bool hayJugadores = false;
+
+    while(jugador != NULL)
+    {
+        Item* item = firstList(jugador->items);
+
+        while(item != NULL)
+        {
+            if(strcmp(item->nombreItem, nombreItem) == 0)
+            {
+                if(!hayJugadores)
+                {
+                    puts("\n========================================");
+                    puts("        Jugadores con el item:");
+                    puts("========================================");
+                }
+
+                printf("    - %s\n", jugador->nombre);
+                contadorJugadores++;
+                hayJugadores = true;
+                break;
+            }
+            
+            item = nextList(jugador->items);
+        }
+
+        jugador = nextMap(jugadores);
+    }
+
+    if(contadorJugadores == 0)
+    {
+        puts("\n========================================");
+        puts("     No hay jugadores con ese item");
+        puts("========================================");
+    }
+    else
+    {
+        puts("========================================");
+        printf(" Total de jugadores con el item: %d\n", contadorJugadores);
+        puts("========================================");
+    }
+
+    puts("");
+    system("pause");
+}
+
 int main(int argc, const char * argv[])
 {
     int opcion;
@@ -340,6 +390,11 @@ int main(int argc, const char * argv[])
                 }
                 break;
             case 6:
+                system("cls");
+                
+                ingresarValor(nombreItem, "    Ingrese el nombre del item");
+
+                mostrarJugadoresItem(nombreItem, jugadores);
 
                 break;
             case 7:
