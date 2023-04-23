@@ -156,11 +156,13 @@ void mostrarJugador(char* nombre, Map* jugadores)
 
 void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugador)
 {
+    // Aqui agregamos el item a la lista de items
     Item* item = (Item*) malloc(sizeof(Item));
     strcpy(item->nombreItem, nombreItem);
 
     pushBack(jugador->items, item);
 
+    // Aqui aumentamos la cantidad de items
     jugador->cantItems++;
 
     puts("\n========================================");
@@ -180,14 +182,20 @@ void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugado
 
 void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugador)
 {
+    // Aqui eliminamos el item de la lista de items
+    // Primero buscamos el item
     Item* item = firstList(jugador->items);
 
+    //Mientras el item exista
     while(item != NULL)
     {
+        //Si el nombre del item es igual al nombre del item que queremos eliminar
         if(strcmp(item->nombreItem, nombreItem) == 0)
         {
+            //Eliminamos el item
             popCurrent(jugador->items);
 
+            //Disminuimos la cantidad de items
             jugador->cantItems--;
 
             puts("\n========================================");
@@ -206,6 +214,7 @@ void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugad
             return;
         }
 
+        //Pasamos al siguiente item
         item = nextList(jugador->items);
     }
 
