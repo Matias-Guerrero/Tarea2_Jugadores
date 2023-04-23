@@ -200,6 +200,25 @@ void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugad
     system("pause");
 }
 
+void agregarPuntosHabilidad(char* nombre, int ptsHabilidad, Map* jugadores, Jugador* jugador)
+{
+    jugador->ptsHabilidad += ptsHabilidad;
+
+    puts("\n========================================");
+    puts("Puntos de habilidad agregados exitosamente");
+    puts("========================================");
+
+    // Aqui agregamos la accion a la pila de acciones
+    Accion* accion = (Accion*) malloc(sizeof(Accion));
+    strcpy(accion->nombreAccion, "agregarPuntosHabilidad");
+    accion->datoAccion = (void *) ptsHabilidad;
+
+    stack_push(jugador->acciones, accion);
+
+    puts("");
+    system("pause");
+}
+
 int main(int argc, const char * argv[])
 {
     int opcion;
@@ -293,7 +312,32 @@ int main(int argc, const char * argv[])
 
                 break;
             case 5:
+                system("cls");
+
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
                 
+                jugador = searchMap(jugadores, nombre);
+
+                if(jugador != NULL)
+                {
+                    int ptsHabilidad;
+                    char cadenaPts[MAXCHAR];
+
+                    puts("");
+                    ingresarValor(cadenaPts, "Ingrese los puntos de habilidad a agregar");
+                    ptsHabilidad = atoi(cadenaPts);
+
+                    agregarPuntosHabilidad(nombre, ptsHabilidad, jugadores, jugador);
+                }
+                else
+                {
+                    puts("\n========================================");
+                    puts("         El jugador no existe");
+                    puts("========================================");
+
+                    puts("");
+                    system("pause");
+                }
                 break;
             case 6:
 
