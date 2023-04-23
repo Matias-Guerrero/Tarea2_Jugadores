@@ -228,8 +228,10 @@ void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugad
 
 void agregarPuntosHabilidad(char* nombre, int ptsHabilidad, Map* jugadores, Jugador* jugador)
 {
+    // Se agregan los puntos de habilidad
     jugador->ptsHabilidad += ptsHabilidad;
 
+    // Se muestra que los puntos de habilidad fueron agregados exitosamente
     puts("\n========================================");
     puts("Puntos de habilidad agregados exitosamente");
     puts("========================================");
@@ -239,58 +241,71 @@ void agregarPuntosHabilidad(char* nombre, int ptsHabilidad, Map* jugadores, Juga
     strcpy(accion->nombreAccion, "agregarPuntosHabilidad");
     accion->datoAccion = (void *) ptsHabilidad;
 
+    // Se agrega la accion a la pila de acciones
     stack_push(jugador->acciones, accion);
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
 
 void mostrarJugadoresItem(char* nombreItem, Map* jugadores)
 {
+    // Se obtiene el primer jugador del mapa
     Jugador* jugador = firstMap(jugadores);
-    int contadorJugadores = 0;
-    bool hayJugadores = false;
+    int contadorJugadores = 0; // Se crea un contador de jugadores
+    bool hayJugadores = false; // Se crea una variable para saber si hay jugadores con el item
 
+    // Mientras el jugador no sea NULL
     while(jugador != NULL)
-    {
+    {   
+        // Se obtiene el primer item de la lista de items del jugador
         Item* item = firstList(jugador->items);
 
+        // Mientras el item no sea NULL
         while(item != NULL)
-        {
+        {   
+            // Si el item es igual al item que se busca
             if(strcmp(item->nombreItem, nombreItem) == 0)
-            {
+            {   
+                // Si no hay jugadores con el item
                 if(!hayJugadores)
-                {
+                {   
+                    // Se muestra el titulo de jugadores con el item
                     puts("\n========================================");
                     puts("        Jugadores con el item:");
                     puts("========================================");
                 }
 
+                // Se muestra el nombre del jugador
                 printf("    - %s\n", jugador->nombre);
-                contadorJugadores++;
-                hayJugadores = true;
+                contadorJugadores++; // Se aumenta el contador de jugadores
+                hayJugadores = true; // Se cambia la variable a true
                 break;
             }
             
+            // Se obtiene el siguiente item
             item = nextList(jugador->items);
         }
 
+        // Se obtiene el siguiente jugador
         jugador = nextMap(jugadores);
     }
 
-    if(contadorJugadores == 0)
+    if(contadorJugadores == 0) // Si no hay jugadores con el item
     {
         puts("\n========================================");
         puts("     No hay jugadores con ese item");
         puts("========================================");
     }
-    else
+    else // Si hay jugadores con el item
     {
         puts("========================================");
         printf(" Total de jugadores con el item: %d\n", contadorJugadores);
         puts("========================================");
     }
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
