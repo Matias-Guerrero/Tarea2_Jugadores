@@ -46,9 +46,9 @@ void ingresarValor(char* cadena, char* texto)
 
 void mostrarMenu()
 {
-    puts("========================================");
-    puts("             Menu Jugadores:");
-    puts("========================================");
+    puts("===================================================");
+    puts("                Menu Jugadores:");
+    puts("===================================================");
 
     puts("1. Crear Jugador");
     puts("2. Mostrar Jugador");
@@ -56,32 +56,39 @@ void mostrarMenu()
     puts("4. Eliminar Item de Jugador");
     puts("5. Agregar Puntos de Habiliad a Jugador");
     puts("6. Mostrar Jugador con Item especifico");
-    puts("7. Deshacer Ultima Accion de Jugador");
-    puts("8. Exportar datos de Jugador a Archivo de Texto"); // Sin implementar
-    puts("9. Cargar datos de Jugador desde Archivo de Texto");
+    puts("7. Deshacer Ultima Accion de Jugador"); // Sin implementar
+    puts("8. Exportar datos de Jugadores a Archivo de Texto"); // Sin implementar
+    puts("9. Cargar datos de Jugadores desde Archivo de Texto"); // Sin implementar
     puts("10. Salir");
-    puts("========================================");
+    puts("===================================================");
 }
 
 void crearJugador(char* nombre, Map* jugadores)
-{
-    if(searchMap(jugadores, nombre) == NULL)
+{   
+    // Buscamos si el jugador existe o no
+    if(searchMap(jugadores, nombre) == NULL) // Si el jugador no existe
     {
+        // Creamos el jugador
         Jugador* jugador = (Jugador*) malloc(sizeof(Jugador));
 
+        // Asignamos los valores
         strcpy(jugador->nombre, nombre);
         jugador->ptsHabilidad = 0;
         jugador->cantItems = 0;
-        jugador->items = createList();
-        jugador->acciones = stack_create();
+        jugador->items = createList(); // Creamos la lista de items
+        jugador->acciones = stack_create(); // Creamos la pila de acciones
 
+        // Insertamos el jugador en el mapa
         insertMap(jugadores, jugador->nombre, jugador);
+
+        // Se muestra que el jugador fue creado exitosamente
         puts("\n========================================");
         puts("         Jugador creado exitosamente");
         puts("========================================");
     }
-    else
+    else // Si el jugador ya existe
     {
+        // Se muestra que el jugador ya existe
         puts("\n========================================");
         puts("         El jugador ya existe");
         puts("========================================");
@@ -92,47 +99,57 @@ void crearJugador(char* nombre, Map* jugadores)
 
 void mostrarJugador(char* nombre, Map* jugadores)
 {
+    // Buscamos el jugador
     Jugador* jugador = searchMap(jugadores, nombre);
 
-    if(jugador != NULL)
+    if(jugador != NULL) // Si el jugador existe
     {
+        // Mostramos los datos del jugador
         puts("\n========================================");
         printf("    Nombre: %s\n", jugador->nombre);
         printf("    Puntos de Habilidad: %d\n", jugador->ptsHabilidad);
         printf("    Cantidad de Items: %d\n", jugador->cantItems);
 
-        if(jugador->cantItems > 0)
+        if(jugador->cantItems > 0) // Si el jugador tiene items
         {
+            // Se crea un contador para mostrar el numero de item
             int contadorItems = 1;
+
+            // Se obtiene el primer item de la lista
             char* item = firstList(jugador->items);
 
             puts("========================================");
             puts("    Items:");
             puts("========================================");
 
+            // Mientras el item no sea NULL
             while(item != NULL)
             {
+                // Se muestra el item
                 printf("    Item %d: %s\n", contadorItems, item);
-                item = nextList(jugador->items);
-                contadorItems++;
+                item = nextList(jugador->items); // Se obtiene el siguiente item
+                contadorItems++; // Se aumenta el contador de items
             }
 
             puts("========================================");
         }
-        else
+        else // Si el jugador no tiene items
         {
+            // Se muestra que no tiene items
             puts("========================================");
             puts("           No tiene items");
             puts("========================================");
         }
     }
-    else
+    else // Si el jugador no existe
     {
+        // Se muestra que el jugador no existe
         puts("\n========================================");
         puts("         El jugador no existe");
         puts("========================================");
     }
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
