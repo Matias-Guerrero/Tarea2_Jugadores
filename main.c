@@ -391,6 +391,67 @@ void guardarJugadores(char* nombreArchivo, Map* jugadores)
     system("pause");
 }
 
+void cargarJugadores(char* nombreArchivo, Map* jugadores)
+{
+    FILE* archivo = fopen(nombreArchivo, "r");
+
+    if(archivo == NULL)
+    {
+        puts("\n========================================");
+        puts("     El archivo no existe");
+        puts("========================================");
+    }
+    else
+    {
+        // Columnas de archivo a leer:
+        // Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8
+
+        char linea[100*MAXCHAR];
+
+        fgets(linea, 100*MAXCHAR, archivo);
+
+        while(fgets(linea, 100*MAXCHAR, archivo))
+        {
+            char* nombre = strtok(linea, ",");
+
+            if(searchMap(jugadores, nombre) == NULL)
+            {
+                char* ptsHabilidad = strtok(NULL, ",");
+                char* cantItems = strtok(NULL, ",");
+
+                Jugador* jugador = (Jugador*) malloc(sizeof(Jugador));
+                strcpy(jugador->nombre, nombre);
+                jugador->ptsHabilidad = atoi(ptsHabilidad);
+                jugador->cantItems = atoi(cantItems);
+                jugador->items = createMap(is_equal_string);
+                jugador->acciones = stack_create();
+
+                for(int i = 0; i < jugador->cantItems; i++)
+                {
+                    char* nombreItem = strtok(NULL, ",\n");
+
+                    Item* item = (Item*) malloc(sizeof(Item));
+                    
+                    strcpy(item->nombreItem, nombreItem);
+
+                    insertMap(jugador->items, item->nombreItem, item);
+                }
+
+                insertMap(jugadores, jugador->nombre, jugador);
+            }
+        }
+
+        puts("\n========================================");
+        puts("         Jugadores cargados");
+        puts("========================================");
+    }
+
+    fclose(archivo);
+
+    puts("");
+    system("pause");
+}
+
 int main(int argc, const char * argv[])
 {
     int opcion;
@@ -549,6 +610,11 @@ int main(int argc, const char * argv[])
 
                 break;
             case 9:
+                system("cls");
+
+                ingresarValor(nombreArchivo, "    Ingrese el nombre del archivo");
+
+                cargarJugadores(nombreArchivo, jugadores); 
 
                 break;
             case 10:
