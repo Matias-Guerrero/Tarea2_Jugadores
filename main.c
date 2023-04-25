@@ -13,7 +13,7 @@ typedef struct{
     char nombre[MAXCHAR];
     int ptsHabilidad;
     int cantItems;
-    List* items;
+    Map* items;
     Stack* acciones;
 }Jugador;
 
@@ -75,7 +75,7 @@ void crearJugador(char* nombre, Map* jugadores)
         strcpy(jugador->nombre, nombre);
         jugador->ptsHabilidad = 0;
         jugador->cantItems = 0;
-        jugador->items = createList(); // Creamos la lista de items
+        jugador->items = createMap(is_equal_string); // Creamos el mapa de items
         jugador->acciones = stack_create(); // Creamos la pila de acciones
 
         // Insertamos el jugador en el mapa
@@ -116,7 +116,7 @@ void mostrarJugador(char* nombre, Map* jugadores)
             int contadorItems = 1;
 
             // Se obtiene el primer item de la lista
-            char* item = firstList(jugador->items);
+            char* item = firstMap(jugador->items);
 
             puts("========================================");
             puts("    Items:");
@@ -127,7 +127,7 @@ void mostrarJugador(char* nombre, Map* jugadores)
             {
                 // Se muestra el item
                 printf("    Item %d: %s\n", contadorItems, item);
-                item = nextList(jugador->items); // Se obtiene el siguiente item
+                item = nextMap(jugador->items); // Se obtiene el siguiente item
                 contadorItems++; // Se aumenta el contador de items
             }
 
@@ -160,7 +160,7 @@ void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugado
     Item* item = (Item*) malloc(sizeof(Item));
     strcpy(item->nombreItem, nombreItem);
 
-    pushBack(jugador->items, item);
+    insertMap(jugador->items, item->nombreItem, item);
 
     // Aqui aumentamos la cantidad de items
     jugador->cantItems++;
@@ -184,38 +184,31 @@ void eliminarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugad
 {
     // Aqui eliminamos el item de la lista de items
     // Primero buscamos el item
-    Item* item = firstList(jugador->items);
+    Item* item = searchMap(jugador->items, nombreItem);
 
-    //Mientras el item exista
-    while(item != NULL)
+    if(item != NULL) // Si el item existe
     {
-        //Si el nombre del item es igual al nombre del item que queremos eliminar
-        if(strcmp(item->nombreItem, nombreItem) == 0)
-        {
-            //Eliminamos el item
-            popCurrent(jugador->items);
+        // Se elimina el item
+        eraseMap(jugador->items, nombreItem);
 
-            //Disminuimos la cantidad de items
-            jugador->cantItems--;
+        jugador->cantItems--; // Se disminuye la cantidad de items del jugador
 
-            puts("\n========================================");
-            puts("         Item eliminado exitosamente");
-            puts("========================================");
+        // Se muestra que el item fue eliminado exitosamente
+        puts("\n========================================");
+        puts("         Item eliminado exitosamente");
+        puts("========================================");
 
-            // Aqui agregamos la accion a la pila de acciones
-            Accion* accion = (Accion*) malloc(sizeof(Accion));
-            strcpy(accion->nombreAccion, "eliminarItem");
-            accion->datoAccion = item;
+        // Aqui agregamos la accion a la pila de acciones
+        Accion* accion = (Accion*) malloc(sizeof(Accion));
+        strcpy(accion->nombreAccion, "eliminarItem");
+        accion->datoAccion = item;
 
-            stack_push(jugador->acciones, accion);
+        stack_push(jugador->acciones, accion); // Se agrega la accion a la pila de acciones
 
-            puts("");
-            system("pause");
-            return;
-        }
-
-        //Pasamos al siguiente item
-        item = nextList(jugador->items);
+        // Se muestra un mensaje de presione una tecla para continuar
+        puts("");
+        system("pause");
+        return;
     }
 
     puts("\n========================================");
@@ -259,33 +252,23 @@ void mostrarJugadoresItem(char* nombreItem, Map* jugadores)
     // Mientras el jugador no sea NULL
     while(jugador != NULL)
     {   
-        // Se obtiene el primer item de la lista de items del jugador
-        Item* item = firstList(jugador->items);
+        Item* item = searchMap(jugador->items, nombreItem); // Se busca el item
 
-        // Mientras el item no sea NULL
-        while(item != NULL)
+        if(item != NULL) // Si el item existe
         {   
-            // Si el item es igual al item que se busca
-            if(strcmp(item->nombreItem, nombreItem) == 0)
+            // Si no hay jugadores con el item
+            if(!hayJugadores)
             {   
-                // Si no hay jugadores con el item
-                if(!hayJugadores)
-                {   
-                    // Se muestra el titulo de jugadores con el item
-                    puts("\n========================================");
-                    puts("        Jugadores con el item:");
-                    puts("========================================");
-                }
-
-                // Se muestra el nombre del jugador
-                printf("    - %s\n", jugador->nombre);
-                contadorJugadores++; // Se aumenta el contador de jugadores
-                hayJugadores = true; // Se cambia la variable a true
-                break;
+                // Se muestra el titulo de jugadores con el item
+                puts("\n========================================");
+                puts("        Jugadores con el item:");
+                puts("========================================");
             }
-            
-            // Se obtiene el siguiente item
-            item = nextList(jugador->items);
+
+            // Se muestra el nombre del jugador
+            printf("    - %s\n", jugador->nombre);
+            contadorJugadores++; // Se aumenta el contador de jugadores
+            hayJugadores = true; // Se cambia la variable a true
         }
 
         // Se obtiene el siguiente jugador
