@@ -469,6 +469,14 @@ int main(int argc, const char * argv[])
             case 6:
                 system("cls");
                 
+                ingresarValor(nombreItem, "    Ingrese el nombre del item");
+
+                mostrarJugadoresItem(nombreItem, jugadores);
+
+                break;
+            case 7:
+                system("cls");
+                
                 ingresarValor(nombre, "    Ingrese el nombre del jugador");
 
                 if(searchMap(jugadores, nombre) != NULL)
@@ -484,9 +492,6 @@ int main(int argc, const char * argv[])
                     puts("");
                     system("pause");
                 }
-
-                break;
-            case 7:
 
                 break;
             case 8:
