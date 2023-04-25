@@ -346,11 +346,57 @@ void deshacerAccion(char *nombreJugador, Map *jugadores)
     system("pause");
 }
 
+void guardarJugadores(char* nombreArchivo, Map* jugadores)
+{
+    FILE* archivo = fopen(nombreArchivo, "w");
+
+    if(archivo == NULL)
+    {
+        puts("\n========================================");
+        puts("   El archivo no se creo correctamente");
+        puts("========================================");
+    }
+    else
+    {
+        // Columnas de archivo a escribir:
+        // Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8
+        fprintf(archivo, "Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8\n");
+
+        Jugador* jugador = firstMap(jugadores);
+
+        while(jugador != NULL)
+        {
+            fprintf(archivo, "%s,%d,%d", jugador->nombre, jugador->ptsHabilidad, jugador->cantItems);
+
+            Item* item = firstMap(jugador->items);
+
+            while(item != NULL)
+            {
+                fprintf(archivo, ",%s", item->nombreItem);
+                item = nextMap(jugador->items);
+            }
+
+            fprintf(archivo, "\n");
+            jugador = nextMap(jugadores);
+        }
+
+        puts("\n========================================");
+        puts("     Jugadores guardados exitosamente");
+        puts("========================================");
+    }
+
+    fclose(archivo);
+
+    puts("");
+    system("pause");
+}
+
 int main(int argc, const char * argv[])
 {
     int opcion;
     char nombre[MAXCHAR];
     char nombreItem[MAXCHAR];
+    char nombreArchivo[MAXCHAR];
     Jugador* jugador;
 
     /*  Aqui Creamos el mapa para guardar jugadores*/
@@ -495,6 +541,11 @@ int main(int argc, const char * argv[])
 
                 break;
             case 8:
+                system("cls");
+
+                ingresarValor(nombreArchivo, "    Ingrese el nombre del archivo");
+
+                guardarJugadores(nombreArchivo, jugadores);
 
                 break;
             case 9:
