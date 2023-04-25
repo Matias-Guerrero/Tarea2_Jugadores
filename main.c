@@ -293,6 +293,59 @@ void mostrarJugadoresItem(char* nombreItem, Map* jugadores)
     system("pause");
 }
 
+void deshacerAccion(char *nombreJugador, Map *jugadores)
+{   
+    Jugador* jugador = searchMap(jugadores, nombreJugador);
+    
+    Accion* ultima_accion = stack_top(jugador->acciones);
+
+    if(ultima_accion == NULL)
+    {
+        puts("\n========================================");
+        printf("%s no tiene ninguna accion a eliminar\n", jugador->nombre);
+        puts("========================================");
+        
+        puts("");
+        system("pause");
+        return;
+    }
+
+    if(strcmp(ultima_accion->nombreAccion, "agregarItem") == 0)
+    {
+        stack_pop(jugador->acciones);
+        eraseMap(jugador->items, ((Item*) ultima_accion->datoAccion)->nombreItem);
+        jugador->cantItems--;
+
+        puts("\n========================================");
+        puts("     Accion agregarItem deshecha");
+        puts("========================================");
+    }
+    
+    if(strcmp(ultima_accion->nombreAccion, "eliminarItem") == 0)
+    {
+        stack_pop(jugador->acciones);
+        insertMap(jugador->items, ((Item*) ultima_accion->datoAccion)->nombreItem, ultima_accion->datoAccion);
+        jugador->cantItems++;
+        
+        puts("\n========================================");
+        puts("     Accion eliminarItem deshecha");
+        puts("========================================");
+    }
+
+    if(strcmp(ultima_accion->nombreAccion, "agregarPuntosHabilidad") == 0)
+    {
+        stack_pop(jugador->acciones);
+        jugador->ptsHabilidad -= (int) ultima_accion->datoAccion;
+      
+        puts("\n========================================");
+        puts("  Accion agregarPuntoHabilidad deshecha");
+        puts("========================================");
+    }
+
+    puts("");
+    system("pause");
+}
+
 int main(int argc, const char * argv[])
 {
     int opcion;
@@ -416,9 +469,21 @@ int main(int argc, const char * argv[])
             case 6:
                 system("cls");
                 
-                ingresarValor(nombreItem, "    Ingrese el nombre del item");
+                ingresarValor(nombre, "    Ingrese el nombre del jugador");
 
-                mostrarJugadoresItem(nombreItem, jugadores);
+                if(searchMap(jugadores, nombre) != NULL)
+                {
+                    deshacerAccion(nombre, jugadores);
+                }
+                else
+                {
+                    puts("\n========================================");
+                    puts("         El jugador no existe");
+                    puts("========================================");
+
+                    puts("");
+                    system("pause");
+                }
 
                 break;
             case 7:
