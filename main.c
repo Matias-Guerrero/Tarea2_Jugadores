@@ -206,26 +206,42 @@ void mostrarJugador(char* nombre, Map* jugadores)
 
 void agregarItem(char* nombre, char* nombreItem, Map* jugadores, Jugador* jugador)
 {
-    // Aqui agregamos el item a la lista de items
-    Item* item = (Item*) malloc(sizeof(Item));
-    strcpy(item->nombreItem, nombreItem);
+    Item* item = searchMap(jugador->items, nombreItem); // Se busca el item
 
-    insertMap(jugador->items, item->nombreItem, item);
+    if(item == NULL) // Si el item no existe
+    {
+        // Se crea el item
+        item = (Item*) malloc(sizeof(Item));
 
-    // Aqui aumentamos la cantidad de items
-    jugador->cantItems++;
+        // Se asignan los valores
+        strcpy(item->nombreItem, nombreItem);
 
-    puts("\n========================================");
-    puts("         Item agregado exitosamente");
-    puts("========================================");
+        // Se inserta el item en el mapa
+        insertMap(jugador->items, item->nombreItem, item);
 
-    // Aqui agregamos la accion a la pila de acciones
-    Accion* accion = (Accion*) malloc(sizeof(Accion));
-    strcpy(accion->nombreAccion, "agregarItem");
-    accion->datoAccion = item;
+        jugador->cantItems++; // Se aumenta la cantidad de items del jugador
 
-    stack_push(jugador->acciones, accion);
+        // Se muestra que el item fue creado exitosamente
+        puts("\n========================================");
+        puts("         Item creado exitosamente");
+        puts("========================================");
 
+        // Aqui agregamos la accion a la pila de acciones
+        Accion* accion = (Accion*) malloc(sizeof(Accion));
+        strcpy(accion->nombreAccion, "agregarItem");
+        accion->datoAccion = item;
+
+        stack_push(jugador->acciones, accion); // Se agrega la accion a la pila de acciones
+    }
+    else // Si el item ya existe
+    {
+        // Se muestra que el item ya existe
+        puts("\n========================================");
+        puts("         El item ya existe");
+        puts("========================================");
+    }
+
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }

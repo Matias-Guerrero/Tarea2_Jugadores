@@ -27,36 +27,41 @@ echo "============================================================"
 # Salto de linea
 saltoLinea
 
-# Verificar si el repositorio local esta actualizado con el remoto
-if git diff --quiet origin/$branch; then
-    echo "============================================================"
-    echo "El repositorio local esta actualizado con el remoto"
-    echo "============================================================"
-else
+# Se verifica si necesitamos hacer un pull
+if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
     echo "============================================================"
     echo "El repositorio local no esta actualizado con el remoto"
     echo "============================================================"
-    
+
     # Salto de linea
     saltoLinea
 
-    # Se muestra que tan desactualizado esta el repositorio local con el remoto
-    git diff origin/$branch
-
-    read -p "¿Desea actualizar el repositorio local con el remoto? (s/n): " option
+    # Se pregunta si se desea hacer un pull
+    read -p "¿Desea hacer un pull? (s/n): " option
 
     if [ $option == "s" ]; then
         git pull origin $branch
 
+        # Salto de linea
+        saltoLinea
+
         echo "============================================================"
-        echo "El repositorio local fue actualizado"
+        echo "El repositorio local fue actualizado con el remoto"
         echo "============================================================"
     else
+        # Salto de linea
+        saltoLinea
+
         echo "============================================================"
-        echo "El repositorio local no fue actualizado"
+        echo "El repositorio local no fue actualizado con el remoto"
         echo "============================================================"
     fi
+else
+    echo "============================================================"
+    echo "El repositorio local esta actualizado con el remoto"
+    echo "============================================================"
 fi
+
 
 # Salto de linea
 saltoLinea
