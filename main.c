@@ -35,6 +35,56 @@ int is_equal_string(void * key1, void * key2) {
     return 0;
 }
 
+char* quitar_tildes(char* cadena)
+{
+    const char *originales = "áéíóúÁÉÍÓÚ"; // cadena de caracteres con tildes
+    const char *reemplazos = "aeiouAEIOU"; // cadena de caracteres sin tildes
+    char* nueva_cadena = (char*) malloc(strlen(cadena) + 1); // se reserva memoria para la nueva cadena
+
+    if (nueva_cadena == NULL) // si no se pudo reservar memoria, se retorna NULL
+    {
+        return NULL;
+    }
+
+    int j = 0; // indice para la nueva cadena
+
+    for(int i = 0; cadena[i] != '\0'; i++) // se recorre la cadena original
+    {   
+        // booleanos para saber si el caracter actual tiene tilde y si ya se reemplazó
+        bool conTilde = false;
+        bool flag = false;
+
+        // se recorre la cadena de caracteres con tildes
+        for(int k = 0; originales[k] != '\0'; k++)
+        {
+            if(cadena[i] == originales[k]) // si el caracter actual tiene tilde
+            {
+                if(!flag) // si no se ha reemplazado
+                {
+                    i++;
+                }
+                else // si ya se reemplazó
+                {
+                    conTilde = true; // se marca que el caracter actual tiene tilde
+                    nueva_cadena[j++] = reemplazos[k/2]; // se agrega el caracter sin tilde a la nueva cadena
+                    break; // se sale del ciclo
+                }
+
+                flag = true; // se marca que ya se reemplazó
+            }
+        }
+
+        if(!conTilde) // si el caracter actual no tiene tilde
+        {   
+            // se agrega el caracter a la nueva cadena
+            nueva_cadena[j++] = cadena[i];
+        }
+    }
+
+    nueva_cadena[j] = '\0'; // se agrega el caracter nulo al final de la nueva cadena
+    return nueva_cadena; // se retorna la nueva cadena
+}
+
 void ingresarValor(char* cadena, char* texto)
 {
     puts("========================================");
@@ -431,7 +481,7 @@ void cargarJugadores(char* nombreArchivo, Map* jugadores)
                     char* nombreItem = strtok(NULL, ",\n");
 
                     Item* item = (Item*) malloc(sizeof(Item));
-                    
+                    nombreItem = quitar_tildes(nombreItem);
                     strcpy(item->nombreItem, nombreItem);
 
                     insertMap(jugador->items, item->nombreItem, item);
@@ -504,9 +554,9 @@ int main(int argc, const char * argv[])
 
                 if(jugador != NULL)
                 {
+                    puts("");
                     ingresarValor(nombreItem, "    Ingrese el nombre del item");
 
-                    puts("");
                     agregarItem(nombre, nombreItem, jugadores, jugador);
                 }
                 else
@@ -630,5 +680,4 @@ int main(int argc, const char * argv[])
    } while (opcion != 10);
 
     return EXIT_SUCCESS;
-    
 }
