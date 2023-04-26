@@ -345,53 +345,61 @@ void mostrarJugadoresItem(char* nombreItem, Map* jugadores)
 
 void deshacerAccion(char *nombreJugador, Map *jugadores)
 {   
+    // Se busca el jugador
     Jugador* jugador = searchMap(jugadores, nombreJugador);
     
+    //se obtiene la ultima accion
     Accion* ultima_accion = stack_top(jugador->acciones);
 
-    if(ultima_accion == NULL)
-    {
+    if(ultima_accion == NULL) //verifica si hay acciones
+    {   
+        //no hay acciones, por tanto solo retorna un mensaje.
         puts("\n========================================");
         printf("%s no tiene ninguna accion a eliminar\n", jugador->nombre);
         puts("========================================");
-        
-        puts("");
-        system("pause");
-        return;
     }
 
-    if(strcmp(ultima_accion->nombreAccion, "agregarItem") == 0)
-    {
+    if(strcmp(ultima_accion->nombreAccion, "agregarItem") == 0) //si la ultima accion es "agregarItem"
+    {   
+        //se elimina la accion de la pila y el item del jugador
         stack_pop(jugador->acciones);
         eraseMap(jugador->items, ((Item*) ultima_accion->datoAccion)->nombreItem);
         jugador->cantItems--;
 
+        //mensaje de exito
         puts("\n========================================");
         puts("     Accion agregarItem deshecha");
         puts("========================================");
     }
     
+    //si la ultima accion es "eliminarItem"
     if(strcmp(ultima_accion->nombreAccion, "eliminarItem") == 0)
-    {
+    {   
+        //elimina la accion de la pila y regresa el item al jugador.
         stack_pop(jugador->acciones);
         insertMap(jugador->items, ((Item*) ultima_accion->datoAccion)->nombreItem, ultima_accion->datoAccion);
         jugador->cantItems++;
         
+        //mensaje de exito
         puts("\n========================================");
         puts("     Accion eliminarItem deshecha");
         puts("========================================");
     }
 
+    //si la ultima accion es "agregarPuntosHabilidad"
     if(strcmp(ultima_accion->nombreAccion, "agregarPuntosHabilidad") == 0)
     {
+        //se restan los puntos previamente agregados y se elimina de la pila
         stack_pop(jugador->acciones);
         jugador->ptsHabilidad -= (int) ultima_accion->datoAccion;
-      
+
+        //mensaje de exito
         puts("\n========================================");
         puts("  Accion agregarPuntoHabilidad deshecha");
         puts("========================================");
     }
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
@@ -411,7 +419,7 @@ void guardarJugadores(char* nombreArchivo, Map* jugadores)
         // Columnas de archivo a escribir:
         // Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8
         fprintf(archivo, "Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8\n");
-
+       
         Jugador* jugador = firstMap(jugadores);
 
         while(jugador != NULL)
