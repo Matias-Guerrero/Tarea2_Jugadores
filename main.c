@@ -94,6 +94,13 @@ void ingresarValor(char* cadena, char* texto)
     while(getchar() != '\n');
 }
 
+void mostrarNoExiste()
+{
+    puts("\n========================================");
+    puts("         El jugador no existe");
+    puts("========================================");
+}
+
 void mostrarMenu()
 {
     puts("===================================================");
@@ -475,32 +482,40 @@ void guardarJugadores(char* nombreArchivo, Map* jugadores)
 
 void cargarJugadores(char* nombreArchivo, Map* jugadores)
 {
+    // Se abre el archivo
     FILE* archivo = fopen(nombreArchivo, "r");
 
-    if(archivo == NULL)
+    if(archivo == NULL) // Si el archivo no existe
     {
         puts("\n========================================");
         puts("     El archivo no existe");
         puts("========================================");
     }
-    else
+    else // Si el archivo existe
     {
         // Columnas de archivo a leer:
         // Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8
 
-        char linea[100*MAXCHAR];
+        char linea[100*MAXCHAR]; // Se crea un arreglo de caracteres para guardar la linea leida del archivo
 
+        // Se lee la primera linea del archivo, la cual corresponde a los nombres de las columnas
         fgets(linea, 100*MAXCHAR, archivo);
 
+        // Se lee la siguiente linea del archivo
         while(fgets(linea, 100*MAXCHAR, archivo))
         {
+            // Se obtiene el nombre del jugador
             char* nombre = strtok(linea, ",");
 
+            // Si el jugador no existe en el mapa de jugadores
             if(searchMap(jugadores, nombre) == NULL)
             {
+                // Se obtienen los puntos de habilidad y la cantidad de items del jugador
                 char* ptsHabilidad = strtok(NULL, ",");
                 char* cantItems = strtok(NULL, ",");
 
+                // Se crea el jugador
+                // Se le asigna memoria y se copian los datos
                 Jugador* jugador = (Jugador*) malloc(sizeof(Jugador));
                 strcpy(jugador->nombre, nombre);
                 jugador->ptsHabilidad = atoi(ptsHabilidad);
@@ -508,28 +523,36 @@ void cargarJugadores(char* nombreArchivo, Map* jugadores)
                 jugador->items = createMap(is_equal_string);
                 jugador->acciones = stack_create();
 
+                // Se recorre la cantidad de items del jugador
                 for(int i = 0; i < jugador->cantItems; i++)
                 {
+                    // Se obtiene el nombre del item
                     char* nombreItem = strtok(NULL, ",\n");
 
+                    // Se crea el item
                     Item* item = (Item*) malloc(sizeof(Item));
-                    nombreItem = quitar_tildes(nombreItem);
-                    strcpy(item->nombreItem, nombreItem);
+                    nombreItem = quitar_tildes(nombreItem); // Se quitan los tildes del nombre del item
+                    strcpy(item->nombreItem, nombreItem); // Se copia el nombre del item
 
+                    // Se inserta el item en el mapa de items del jugador
                     insertMap(jugador->items, item->nombreItem, item);
                 }
 
+                // Se inserta el jugador en el mapa de jugadores
                 insertMap(jugadores, jugador->nombre, jugador);
             }
         }
 
+        // Se muestra un mensaje de jugadores cargados
         puts("\n========================================");
         puts("         Jugadores cargados");
         puts("========================================");
     }
 
+    // Se cierra el archivo
     fclose(archivo);
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
@@ -593,9 +616,7 @@ int main(int argc, const char * argv[])
                 }
                 else
                 {
-                    puts("\n========================================");
-                    puts("         El jugador no existe");
-                    puts("========================================");
+                    mostrarNoExiste();
 
                     puts("");
                     system("pause");
@@ -618,9 +639,7 @@ int main(int argc, const char * argv[])
                 }
                 else
                 {
-                    puts("\n========================================");
-                    puts("         El jugador no existe");
-                    puts("========================================");
+                    mostrarNoExiste();
 
                     puts("");
                     system("pause");
@@ -647,9 +666,7 @@ int main(int argc, const char * argv[])
                 }
                 else
                 {
-                    puts("\n========================================");
-                    puts("         El jugador no existe");
-                    puts("========================================");
+                    mostrarNoExiste();
 
                     puts("");
                     system("pause");
@@ -674,9 +691,7 @@ int main(int argc, const char * argv[])
                 }
                 else
                 {
-                    puts("\n========================================");
-                    puts("         El jugador no existe");
-                    puts("========================================");
+                    mostrarNoExiste();
 
                     puts("");
                     system("pause");
