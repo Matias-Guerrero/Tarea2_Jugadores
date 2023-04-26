@@ -406,10 +406,12 @@ void deshacerAccion(char *nombreJugador, Map *jugadores)
 
 void guardarJugadores(char* nombreArchivo, Map* jugadores)
 {
+    // Se crea el archivo
     FILE* archivo = fopen(nombreArchivo, "w");
 
-    if(archivo == NULL)
+    if(archivo == NULL) // Si el archivo no se creo correctamente
     {
+        // Se muestra un mensaje de error
         puts("\n========================================");
         puts("   El archivo no se creo correctamente");
         puts("========================================");
@@ -420,31 +422,37 @@ void guardarJugadores(char* nombreArchivo, Map* jugadores)
         // Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8
         fprintf(archivo, "Nombre,Puntos de habilidad,#items,Item 1,Item 2,Item 3,Item 4,Item 5,Item 6,Item 7,Item 8\n");
        
-        Jugador* jugador = firstMap(jugadores);
+        Jugador* jugador = firstMap(jugadores);// Se obtiene el primer jugador del mapa
 
-        while(jugador != NULL)
+        while(jugador != NULL)// Mientras el jugador no sea NULL
         {
+            // Se escribe el nombre, los puntos de habilidad y la cantidad de items del jugador
             fprintf(archivo, "%s,%d,%d", jugador->nombre, jugador->ptsHabilidad, jugador->cantItems);
 
-            Item* item = firstMap(jugador->items);
+            Item* item = firstMap(jugador->items);// Se obtiene el primer item del jugador
 
-            while(item != NULL)
+            while(item != NULL)// Mientras el item no sea NULL
             {
+                // Se escribe el nombre del item
                 fprintf(archivo, ",%s", item->nombreItem);
-                item = nextMap(jugador->items);
+                item = nextMap(jugador->items);// Se obtiene el siguiente item del jugador
             }
 
+            // Se escribe un salto de linea
             fprintf(archivo, "\n");
-            jugador = nextMap(jugadores);
+            jugador = nextMap(jugadores); // Se obtiene el siguiente jugador del mapa
         }
 
+        // Se muestra un mensaje de jugadores guardados exitosamente
         puts("\n========================================");
         puts("     Jugadores guardados exitosamente");
         puts("========================================");
     }
 
+    // Se cierra el archivo
     fclose(archivo);
 
+    // Se muestra un mensaje de presione una tecla para continuar
     puts("");
     system("pause");
 }
