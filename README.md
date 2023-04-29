@@ -7,7 +7,7 @@ Control de jugadores implementado con las TDAs mapa y pila.
 ---
 **Antes de Empezar**
 
-*   Creamos un repositorio en GitHub con el uso de comandos en git bash, el link es el siguiente: 
+*   Creamos un repositorio en GitHub con el uso de comandos en git bash, el link es el siguiente: https://github.com/Matias-Guerrero/Tarea2_Jugadores
 *   Utilizamos Visual Studio Code para que cada integrante del grupo clonara el repositorio en sus computadores.
 *   Para ejecutar el codigo comenzamos compilando nuestros archivos .c a traves de la terminal con el siguiente comando: `gcc -g main.c list.c Map.c -o Tarea2`, con este comando se crea un archivo .exe, luego para ejecutar Tarea2.exe utilizamos el siguiente comando: `\Tarea2.exe`.
 *   Para ejecutar el codigo se debe descargar solo el archivo `Tarea2.exe`.
