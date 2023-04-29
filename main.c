@@ -113,9 +113,9 @@ void mostrarMenu()
     puts("4. Eliminar Item de Jugador");
     puts("5. Agregar Puntos de Habiliad a Jugador");
     puts("6. Mostrar Jugador con Item especifico");
-    puts("7. Deshacer Ultima Accion de Jugador"); // Sin implementar
-    puts("8. Exportar datos de Jugadores a Archivo de Texto"); // Sin implementar
-    puts("9. Cargar datos de Jugadores desde Archivo de Texto"); // Sin implementar
+    puts("7. Deshacer Ultima Accion de Jugador"); 
+    puts("8. Exportar datos de Jugadores a Archivo de Texto"); 
+    puts("9. Cargar datos de Jugadores desde Archivo de Texto"); 
     puts("10. Salir");
     puts("===================================================");
 }
