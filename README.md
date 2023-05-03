@@ -110,12 +110,14 @@ typedef struct{
     Map* items;
     Stack* acciones;
 }Jugador;
+````
 
 * Item:
 ````c
 typedef struct{
     char nombreItem[MAXCHAR];
 }Item;
+````
 
 * Accion:
 ````c
